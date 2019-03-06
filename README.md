@@ -121,20 +121,20 @@ On HOST1:
 
 On HOST2
 
-/home/ubuntu/
-└── kubeadmcfg.yaml
+\/home/ubuntu/
+\└── kubeadmcfg.yaml
 ---
-/etc/kubernetes/pki
-├── apiserver-etcd-client.crt
-├── apiserver-etcd-client.key
-└── etcd
-    ├── ca.crt
-    ├── healthcheck-client.crt
-    ├── healthcheck-client.key
-    ├── peer.crt
-    ├── peer.key
-    ├── server.crt
-    └── server.key
+\/etc/kubernetes/pki
+\├── apiserver-etcd-client.crt
+\├── apiserver-etcd-client.key
+\└── etcd
+\    ├── ca.crt
+\    ├── healthcheck-client.crt
+\    ├── healthcheck-client.key
+\    ├── peer.crt
+\    ├── peer.key
+\    ├── server.crt
+\    └── server.key
 
 
 Create the static pod manifests
