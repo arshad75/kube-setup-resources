@@ -10,7 +10,7 @@ Launch three Ubuntu Server 16.04 LTS Servers and make sure that the three hosts 
 
 Install # kubectl # kubeadm and # docker by running the below commands   
 $sudo su  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-node.sh > etcd-node.sh  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd-setup/etcd-node.sh > etcd-node.sh  
 
 #chmod +x etcd-node.sh  
 #apt-get update -y  
@@ -46,14 +46,14 @@ First run the below command on all the three ETCD cluster hosts {HOST0,HOST1,HOS
 #cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf  
 [Service]  
 ExecStart=  
-ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true  
+ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true    
 Restart=always  
 EOF  
 
 #systemctl daemon-reload  
 #systemctl restart kubelet  
 
-Now, on the first node (HOST0) of the etcd cluster generate the necessary certifigates by running the below shell script  
+Now, on the first node (HOST0) of the etcd cluster generate the necessary certifigates by running the below shell script    
   
 Run the below command on the first Node to generate the ca.crt & ca.key.  
 #kubeadm init phase certs etcd-ca  
@@ -61,28 +61,28 @@ Run the below command on the first Node to generate the ca.crt & ca.key.
 This creates two files  
  ./etc/kubernetes/pki/etcd/ca.crt  
  ./etc/kubernetes/pki/etcd/ca.key  
- 
-Now create certificates for each member by running the below commands.   
+   
+Now create certificates for each member by running the below commands.  
   
-#curl https://github.com/lc-kubeadm/kube-setup-resources/tree/master/ha/etcd-setup/etcd-certs.sh > etcd-certs.sh    
-#chmod +x etcd-certs.sh  
-#vim etcd-certs.sh ## update the HOST0, HOST1, and HOST2 in the script with the ip's of the etcd cluster nodes.   
+#curl https://github.com/lc-kubeadm/kube-setup-resources/tree/master/ha/etcd-setup/etcd-certs.sh > etcd-certs.sh  
+#chmod +x etcd-certs.s  
+#vim etcd-certs.sh ## update the HOST0, HOST1, and HOST2 in the script with the ip's of the etcd cluster nodes.  
 #./etcd-certs.sh  
 #cd /tmp/   ## The certificates are saved in the temp dir with the host name.  
   
 When you run the etcd-certs.sh script the keys and certs for the HOST0 are moved to the /etc/kubernetes/pki and /etc/kubernetes/pki/etcd/ folder respectively and the kubeadmcfg.yaml is saved at /tmp/{HOST0}/ dir.  
   
-The certificates and kubeadm configs for the {HOST1 and HOST2} are saved in /tmp/{HOST1} and /tmp/{HOST2} dir of HOST0 Server.   
+The certificates and kubeadm configs for the {HOST1 and HOST2} are saved in /tmp/{HOST1} and /tmp/{HOST2} dir of HOST0 Server.  
   
 The certificates have been generated and now they must be moved to their respective hosts.  
   
 Copy the /tmp/{HOST1}/pki to {HOST1}/etc/kubernetes/ dir.  
 Copy the /tmp/{HOST1}/kubeadmcfg.yaml to {HOST1}/etc/ubuntu/ dir.  
-  
+
 Copy the /tmp/{HOST2}/pki to {HOST2}/etc/kubernetes/ dir.  
 Copy the /tmp/{HOST2}/kubeadmcfg.yaml to {HOST1}/etc/ubuntu/ dir.  
-  
-Ensure all expected files exist after they are copied   
+    
+Ensure all expected files exist after they are copied  
   
 The complete list of required files on $HOST0 is:  
   
@@ -98,58 +98,58 @@ On HOST0
     - ca.key  
     - healthcheck-client.crt  
     - healthcheck-client.key  
-    - peer.crt
-    - peer.key
-    - server.crt
-    - server.key
-    
-On HOST1
-
-/home/ubuntu/
-- kubeadmcfg.yaml
-/etc/kubernetes/pki
-  - apiserver-etcd-client.crt
-  - apiserver-etcd-client.key
- - etcd
-    - ca.crt
-    - healthcheck-client.crt
-    - healthcheck-client.key
-    - peer.crt
-    - peer.key
-    - server.crt
-    - server.key
-
-On HOST2
-
-/home/ubuntu/
-- kubeadmcfg.yaml
- /etc/kubernetes/pki
-  - apiserver-etcd-client.crt
-  - apiserver-etcd-client.keyhttps://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd.sh >
- - etcd
-    - ca.crt
-    - healthcheck-client.crt
-    - healthcheck-client.key
-    - peer.crt
-    - peer.key
-    - server.crt
-    - server.key
-
-Create the static pod manifests
-Now that the certificates and configs are in place it’s time to create the manifests. On each host run the kubeadm command to generate a static manifest for etcd.
-
-On HOST0 #kubeadm init phase etcd local --config=/tmp/${HOST0}/kubeadmcfg.yaml
-On HOST1 #kubeadm init phase etcd local --config=/home/ubuntu/kubeadmcfg.yaml
-On HOST2 #kubeadm init phase etcd local --config=/home/ubuntu/kubeadmcfg.yaml
-
-Check the cluster health on HOST0
-
-#export ETCD_TAG=v3.2.24
-#export HOST0=(ip addr of HOST0)
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-health-check.sh > etcd-health-check.sh
-#chmod +x etcd-health-check.sh
-#./etcd-health-check.sh
-
-OUTPUT
-...
-cluster is healthy 
+    - peer.crt  
+    - peer.key  
+    - server.crt  
+    - server.key  
+      
+On HOST1  
+  
+/home/ubuntu/  
+- kubeadmcfg.yaml  
+/etc/kubernetes/pki  
+  - apiserver-etcd-client.crt  
+  - apiserver-etcd-client.key  
+ - etcd  
+    - ca.crt  
+    - healthcheck-client.crt  
+    - healthcheck-client.key  
+    - peer.crt  
+    - peer.key  
+    - server.crt  
+    - server.key  
+  
+On HOST2  
+  
+/home/ubuntu/  
+- kubeadmcfg.yaml  
+ /etc/kubernetes/pki  
+  - apiserver-etcd-client.crt  
+  - apiserver-etcd-client.key    
+ - etcd  
+    - ca.crt  
+    - healthcheck-client.crt  
+    - healthcheck-client.key  
+    - peer.crt  
+    - peer.key  
+    - server.crt  
+    - server.key  
+  
+Create the static pod manifests  
+Now that the certificates and configs are in place it’s time to create the manifests. On each host run the kubeadm command to generate a static manifest for etcd.  
+  
+On HOST0 #kubeadm init phase etcd local --config=/tmp/${HOST0}/kubeadmcfg.yaml  
+On HOST1 #kubeadm init phase etcd local --config=/home/ubuntu/kubeadmcfg.yaml  
+On HOST2 #kubeadm init phase etcd local --config=/home/ubuntu/kubeadmcfg.yaml  
+  
+Check the cluster health on HOST0  
+  
+#export ETCD_TAG=v3.2.24  
+#export HOST0=(ip addr of HOST0)  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-health-check.sh > etcd-health-check.sh  
+#chmod +x etcd-health-check.sh  
+#./etcd-health-check.sh  
+  
+OUTPUT  
+...  
+cluster is healthy  
