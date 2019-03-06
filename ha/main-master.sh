@@ -32,7 +32,7 @@ apt-mark hold kubelet kubeadm kubectl docker-ce
 
 echo " ------------------ Kubeadm kubernetes installer | Finised  ----------------"
 
-echo " ------------------ Initiating Kubernetes Cluster First Master  ----------------"
+echo " ------------------ Initiating Kubernetes Cluster Main Master  ----------------"
 
 kubeadm init --kubeconfig=/home/ubutu/kubeconfig.sh
 
