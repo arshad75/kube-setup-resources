@@ -6,9 +6,9 @@ Kubernetes Cluster setup resources
 
 This task walks through the process of creating a high availability etcd cluster of three members that can be used as an external etcd when using kubeadm to set up a kubernetes cluster.  
 
-Launch three Ubuntu Server 16.04 LTS Servers and make sure that the three hosts can talk to each other over ports 2379 and 2380.   
+Launch three Ubuntu 16.04 LTS Servers and make sure that the three hosts can talk to each other over ports 2379 and 2380.   
 
-Install # kubectl # kubeadm and # docker by running the below commands   
+Install # kubelet # kubeadm and # docker by running the below commands   
 $sudo su  
 #curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd-setup/etcd-node.sh > etcd-node.sh  
 
@@ -153,3 +153,49 @@ Check the cluster health on HOST0
 OUTPUT  
 ...  
 cluster is healthy  
+
+# Setting up HA Proxy Load Balancer  
+  
+ 
+  
+# Kubernetes Main Master Initialization  
+  
+Launch an Ubuntu 16.04 LTS Server.  
+  
+SSH to the server and run the below commands.  
+#sudo su  
+#cd /home/ubuntu  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/kubeadm-config.yaml > kubeadm-config.yaml  
+  
+Edit the kubeadm-config.yaml and update the HOST0,HOST1,HOST2 IPs and controlPlaneEndpoint: "10.X.X.X:6443" with the IP address of the HA Proxy Load Balancer.  
+  
+Install # kubectl # kubelet # kubeadm and # docker by running the below commands  
+  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/main-master.sh > main-master.sh  
+#chmod +x main-master.sh  
+#./main-master.sh  
+  
+Once the Main master is initialized, copy the Join token Command and save it for further reference.  
+Now, to start using your cluster, you need to run the following commands.  
+
+mkdir -p $HOME/.kube  
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  
+sudo chown $(id -u):$(id -g) $HOME/.kube/config  
+
+# Adding More Masters 
+  
+  
+  
+  
+  
+  
+  
+# Adding Worker Nodes  
+  
+  
+  
+  
+  
+  
+  
+  
