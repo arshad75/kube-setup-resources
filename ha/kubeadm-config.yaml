@@ -10,9 +10,9 @@ controlPlaneEndpoint: "10.X.X.X:6443"
 etcd:
     external:
         endpoints:
-        - https://10.X.X.155:2379   # update the etcd node-1 ip address 
-        - https://10.X.X.156:2379   # update the etcd node-2 ip address
-        - https://10.X.X.157:2379   # update the etcd node-3 ip address
+        - https://10.X.X.155:2379   # update the etcd HOST0 ip address 
+        - https://10.X.X.156:2379   # update the etcd HOST1 ip address
+        - https://10.X.X.157:2379   # update the etcd HOST2 ip address
         caFile: /etc/kubernetes/pki/etcd/ca.crt
         certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
         keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
