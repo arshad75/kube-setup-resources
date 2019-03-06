@@ -10,9 +10,7 @@ DOCKER_VERSION="18.06.1~ce~3-0~ubuntu"
 echo " ------------------ Kubeadm kubernetes installer ----------------"
 echo " ------------------ installer for ETCD node    ----------------"
 
-
-apt-mark unhold kubelet kubeadm docker-ce
-
+#apt-mark unhold kubelet kubeadm docker-ce
 #apt purge kubelet kubeadm kubectl docker-ce
 
 apt-get update && apt-get install -y apt-transport-https curl
@@ -42,7 +40,7 @@ add-apt-repository \
 
 apt-get update
 
-apt-get install  kubelet=$KUBELET_VERSION kubeadm=$KUBEADM_VERSION docker-ce=$DOCKER_VERSION
+apt-get install  kubelet=$KUBELET_VERSION kubeadm=$KUBEADM_VERSION docker-ce=$DOCKER_VERSION -y
 
 #apt install kubectl=$KUBECTL_VERSION && apt-mark hold kubectl
 

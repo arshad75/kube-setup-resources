@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Update HOST0, HOST1, and HOST2 with the IPs or resolvable names of your hosts
-export HOST0=10.26.37.155
-export HOST1=10.26.37.156
-export HOST2=10.26.37.157
+export HOST0=10.XX.XX.XX 
+export HOST1=10.XX.XX.XX
+export HOST2=10.XX.XX.XX 
 
 # Create temp directories to store files that will end up on other hosts.
 mkdir -p /tmp/${HOST0}/ /tmp/${HOST1}/ /tmp/${HOST2}/
