@@ -10,19 +10,18 @@ Launch three Ubuntu Server 16.04 LTS Servers and make sure that the three hosts 
 
 Install # kubectl # kubeadm and # docker by running the below commands 
 $sudo su
-# curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-node.sh > etcd-node.sh 
-## update the url after the git push from laptop
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-node.sh > etcd-node.sh ##rupdate the url after the git push from laptop
 
-- chmod +x etcd-node.sh
-- apt-get update -y
-- ./etcd-node.sh
+#chmod +x etcd-node.sh
+#apt-get update -y
+#./etcd-node.sh
 
 Check the docker kubeadm and kubelet version
--# kubeadm version
+#kubeadm version
 kubeadm version: &version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.2", GitCommit:"cff46ab41ff0bb44d8584413b598ad8360ec1def", GitTreeState:"clean", BuildDate:"2019-01-10T23:33:30Z", GoVersion:"go1.11.4", Compiler:"gc", Platform:"linux/amd64"}
--# kubelet --version
+#kubelet --version
 Kubernetes v1.13.2
--# docker version
+#docker version
 Client:
  Version:           18.06.1-ce
  API version:       1.38
@@ -44,15 +43,15 @@ Server:
 
 First run the below command on all the three ETCD cluster hosts {HOST0,HOST1,HOST2} as a privileged user. 
 
--# cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf
+#cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf
 [Service]
 ExecStart=
 ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true
 Restart=always
 EOF
 
--#systemctl daemon-reload
--#systemctl restart kubelet
+#systemctl daemon-reload
+#systemctl restart kubelet
 
 Now, on the first node (HOST0) of the etcd cluster generate the necessary certifigates by running the below shell script
 
@@ -65,11 +64,11 @@ This creates two files
  
 Now create certificates for each member by running the below commands. 
 
--# curl https://github.com/lc-kubeadm/kube-setup-resources/tree/master/ha/etcd-setup/etcd-certs.sh > etcd-certs.sh ##rupdate the url after the git push from laptop
--# chmod +x etcd-certs.sh 
--# vim etcd-certs.sh ## update the HOST0, HOST1, and HOST2 in the script with the ip's of the etcd cluster nodes. 
--#. /etcd-certs.sh
--# cd /tmp/   ## The certificates are saved in the temp dir with the host name.
+#curl https://github.com/lc-kubeadm/kube-setup-resources/tree/master/ha/etcd-setup/etcd-certs.sh > etcd-certs.sh ##rupdate the url after the git push from laptop
+#chmod +x etcd-certs.sh 
+#vim etcd-certs.sh ## update the HOST0, HOST1, and HOST2 in the script with the ip's of the etcd cluster nodes. 
+#./etcd-certs.sh
+#cd /tmp/   ## The certificates are saved in the temp dir with the host name.
 
 When you run the etcd-certs.sh script the keys and certs for the HOST0 are moved to the /etc/kubernetes/pki and /etc/kubernetes/pki/etcd/ folder respectively and the kubeadmcfg.yaml is saved at /tmp/{HOST0}/ dir.
 
@@ -126,7 +125,7 @@ On HOST2
 - kubeadmcfg.yaml
  /etc/kubernetes/pki
   - apiserver-etcd-client.crt
-  - apiserver-etcd-client.key
+  - apiserver-etcd-client.keyhttps://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd.sh >
  - etcd
     - ca.crt
     - healthcheck-client.crt
@@ -147,14 +146,9 @@ Check the cluster health on HOST0
 
 #export ETCD_TAG=v3.2.24
 #export HOST0=(ip addr of HOST0)
-
-#docker run --rm -it \
---net host \
--v /etc/kubernetes:/etc/kubernetes quay.io/coreos/etcd:${ETCD_TAG} etcdctl \
---cert-file /etc/kubernetes/pki/etcd/peer.crt \
---key-file /etc/kubernetes/pki/etcd/peer.key \
---ca-file /etc/kubernetes/pki/etcd/ca.crt \
---endpoints https://${HOST0}:2379 cluster-health
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-health-check.sh > etcd-health-check.sh
+#chmod +x etcd-health-check.sh
+#./etcd-health-check.sh
 
 OUTPUT
 ...
