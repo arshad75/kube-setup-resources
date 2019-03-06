@@ -86,31 +86,31 @@ Ensure all expected files exist after they are copied
 
 The complete list of required files on $HOST0 is:
 
+On HOST0
+
 /tmp/{HOST0}
-└── kubeadmcfg.yaml
----
+- kubeadmcfg.yaml
 /etc/kubernetes/pki
   - apiserver-etcd-client.crt
   - apiserver-etcd-client.key
-└── etcd
-    ├── ca.crt
-    ├── ca.key
-    ├── healthcheck-client.crt
-    ├── healthcheck-client.key
-    ├── peer.crt
-    ├── peer.key
-    ├── server.crt
-    └── server.key
+ - etcd
+    - ca.crt
+    - ca.key
+    - healthcheck-client.crt
+    - healthcheck-client.key
+    - peer.crt
+    - peer.key
+    - server.crt
+    - server.key
     
-On HOST1:
+On HOST1
 
 /home/ubuntu/
 - kubeadmcfg.yaml
----
 /etc/kubernetes/pki
   - apiserver-etcd-client.crt
   - apiserver-etcd-client.key
-  - etcd
+ - etcd
     - ca.crt
     - healthcheck-client.crt
     - healthcheck-client.key
@@ -122,20 +122,18 @@ On HOST1:
 On HOST2
 
 /home/ubuntu/
-└── kubeadmcfg.yaml
----
+- kubeadmcfg.yaml
  /etc/kubernetes/pki
- ├── apiserver-etcd-client.crt
- ├── apiserver-etcd-client.key
- └── etcd
-    ├── ca.crt
-    ├── healthcheck-client.crt
-    ├── healthcheck-client.key
-    ├── peer.crt
-    ├── peer.key
-    ├── server.crt
-    └── server.key
-
+  - apiserver-etcd-client.crt
+  - apiserver-etcd-client.key
+ - etcd
+    - ca.crt
+    - healthcheck-client.crt
+    - healthcheck-client.key
+    - peer.crt
+    - peer.key
+    - server.crt
+    - server.key
 
 Create the static pod manifests
 Now that the certificates and configs are in place it’s time to create the manifests. On each host run the kubeadm command to generate a static manifest for etcd.
@@ -159,7 +157,4 @@ Check the cluster health on HOST0
 
 OUTPUT
 ...
-cluster is healthy
- 
-
----------------------------------------------------------------------------------------------------------------------------
+cluster is healthy 
