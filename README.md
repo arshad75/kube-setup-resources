@@ -162,22 +162,23 @@ Now, start the HAProxy server
 # Kubernetes Main Master Initialization  
   
 Launch an Ubuntu 16.04 LTS Server.  
-  
+
+
 SSH to the server and run the below commands.  
+
+### Copy the {ca.crt apiserver-etcd-client.crt & apiserver-etcd-client.key} certificates from HOST0 of the ETCD cluster to the Main Master Server and save the apiserver-etcd-client.crt & apiserver-etcd-client.key to /etc/kubernetes/pki and car.crt to /etc/kubernetes/pki/etcd dir of the Main Master Server.   
+
 #sudo su  
 #apt-get update -y
 #cd /home/ubuntu  
-  
-#vim ha/kubeadm-config.yaml
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/kubeadm-config.yaml > kubeadm-config.yaml 
+#vim kubeadm-config.yaml
 Edit the kubeadm-config.yaml and update the HOST0,HOST1,HOST2 IPs and controlPlaneEndpoint: "10.X.X.X:6443" with the IP address of the HA Proxy Load Balancer.  
   
-Install # kubectl # kubelet # kubeadm and # docker by running the below commands  
- 
-Move the certificates from HOST0 of the etcd cluster to the Main Master Server and save them to /etc/kubernetes/pki dir.  
-  
-  
-#chmod +x ha/main-master.sh  
-#./ha/main-master.sh  
+##### Install # kubectl # kubelet # kubeadm and # docker by running the below commands  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/main-master.sh > main-master.sh    
+#chmod +x main-master.sh  
+#./main-master.sh  
   
 Once the Main master is initialized, run the below command to save the token to a text file.
 
