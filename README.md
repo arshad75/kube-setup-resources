@@ -202,9 +202,6 @@ Now, Join the Cluster as a Master Node.
 - Copy certificates between the first control plane node and the other control plane nodes.  
 - Join each control plane node with the join command that you saved to a text file, plus add the --experimental-control-plane flag.  
   
-Add Master Role to the second master created by running the below command. 
-
-kubectl label NODE-NAME node-role.kubernetes.io/master=master
 
 # Adding Worker Nodes  
 
@@ -221,6 +218,11 @@ SSH to the server and run the below commands.
 #./worker-setup.sh  
   
 Now, Join the Cluster as a Worker Node by running the join command that you saved to a text file and do not add --experimental-control-plane flag.  
+
+
+Add Worker Role to the workers by running the below command. 
+
+kubectl label NODE-NAME node-role.kubernetes.io/worker=worker
 
 
 # Accessing the Dashboard   
