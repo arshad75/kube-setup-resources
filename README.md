@@ -10,11 +10,11 @@ Launch three Ubuntu 16.04 LTS Servers and make sure that the three hosts can tal
 
 Install # kubelet # kubeadm and # docker by running the below commands   
 $sudo su  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd-setup/etcd-node.sh > etcd-node.sh  
+  
 
-#chmod +x etcd-node.sh  
+#chmod +x ./ha/etcd-setup/etcd-node.sh  
 #apt-get update -y  
-#./etcd-node.sh  
+#./ha/etcd-setup/etcd-node.sh  
 
 Check the docker kubeadm and kubelet version  
 #kubeadm version  
@@ -64,10 +64,9 @@ This creates two files
    
 Now create certificates for each member by running the below commands.  
   
-#curl https://github.com/lc-kubeadm/kube-setup-resources/tree/master/ha/etcd-setup/etcd-certs.sh > etcd-certs.sh  
-#chmod +x etcd-certs.s  
+#chmod +x ha/etcd-setup/etcd-certs.s  
 #vim etcd-certs.sh ## update the HOST0, HOST1, and HOST2 in the script with the ip's of the etcd cluster nodes.  
-#./etcd-certs.sh  
+#./ha/etcd-setup/etcd-certs.sh  
 #cd /tmp/   ## The certificates are saved in the temp dir with the host name.  
   
 When you run the etcd-certs.sh script the keys and certs for the HOST0 are moved to the /etc/kubernetes/pki and /etc/kubernetes/pki/etcd/ folder respectively and the kubeadmcfg.yaml is saved at /tmp/{HOST0}/ dir.  
@@ -146,9 +145,9 @@ Check the cluster health on HOST0
   
 #export ETCD_TAG=v3.2.24  
 #export HOST0=(ip addr of HOST0)  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd/etcd-health-check.sh > etcd-health-check.sh  
-#chmod +x etcd-health-check.sh  
-#./etcd-health-check.sh  
+
+#chmod +x ha/etcd-setup/etcd-health-check.sh  
+#./ha/etcd-setup/etcd-health-check.sh  
   
 OUTPUT  
 ...  
@@ -163,7 +162,6 @@ Run the below commands to install the HA Proxy Server.
 $sudo su
 #apt-get update && apt-get install -y haproxy 
 #mv /etc/haproxy/haproxy.cfg{,.back}
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/haproxy.cfg > haproxy.cfg
 #vi /etc/haproxy/haproxy.cfg
 
 update the hostname and ip address of all the masters in the haproxy.cfg.
@@ -179,17 +177,15 @@ SSH to the server and run the below commands.
 #sudo su  
 #apt-get update -y
 #cd /home/ubuntu  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/kubeadm-config.yaml > kubeadm-config.yaml  
-#vim kubeadm-config.yaml
+#vim ha/kubeadm-config.yaml
 Edit the kubeadm-config.yaml and update the HOST0,HOST1,HOST2 IPs and controlPlaneEndpoint: "10.X.X.X:6443" with the IP address of the HA Proxy Load Balancer.  
   
 Install # kubectl # kubelet # kubeadm and # docker by running the below commands  
  
 Move the certificates from HOST0 of the etcd cluster to the Main Master Server and save them to /etc/kubernetes/pki dir.  
   
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/main-master.sh > main-master.sh  
-#chmod +x main-master.sh  
-#./main-master.sh  
+#chmod +x ./ha/main-master.sh  
+#./ha/main-master.sh  
   
 Once the Main master is initialized, run the below command to save the token to a text file.
 
@@ -204,9 +200,9 @@ SSH to the server and run the below commands.
 #sudo su  
 #apt-get update -y  
 #cd /home/ubuntu  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/masters.sh > masters.sh  
-#chmod +x masters.sh  
-#./masters.sh
+  
+#chmod +x ha/masters.sh  
+#./ha/masters.sh
   
   
 Now, Join the Cluster as a Master Node.  
@@ -230,9 +226,8 @@ SSH to the server and run the below commands.
 #sudo su  
 #apt-get update -y  
 #cd /home/ubuntu  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/worker-setup.sh > worker-setup.sh
-#chmod +x worker-setup.sh
-#./worker-setup.sh
+#chmod +x ha/worker-setup.sh
+#./ha/worker-setup.sh
 
 Now, Join the Cluster as a Worker Node by running the join command that you saved to a text file and do not add --experimental-control-plane flag.  
   
