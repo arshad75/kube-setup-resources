@@ -146,8 +146,8 @@ Check the cluster health on HOST0
 #export HOST0=(ip addr of HOST0)  
 
 #curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd-setup/cluster-health.sh > cluster-health.sh  
-#chmod +x ha/etcd-setup/cluster-health.sh  
-#./ha/etcd-setup/cluster-health.sh  
+#chmod +x cluster-health.sh  
+#./cluster-health.sh  
   
 OUTPUT  
 ...  
