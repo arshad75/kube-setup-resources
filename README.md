@@ -242,7 +242,7 @@ To access the Dashboard Import the kubecfg.p12 certificate, reopen your browser,
 kubecfg.p12 certificate was generated during the Main Master Setup and is stored on the Main Master Server at /home/ubuntu/kubecfg.p12.  
   
   
-####https://<HA-PROXY-SERVER-IP>:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login  
+#### https://<HA-PROXY-SERVER-IP>:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login  
   
 The TOKEN to login to the Dashboard was generated during the Main Master setup and has been saved at /home/ubuntu/login_token   
   
