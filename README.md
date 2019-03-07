@@ -238,3 +238,26 @@ The TOKEN to login to the Dashboard was generated during the Main Master setup a
   
 SSH to the Main Master and cat /home/ubuntu/login_token to get the login token.  
 
+
+# Configuring remote cluster control
+
+One more things that we left to do is to configure a remote kubectl utility, that we’ll use for controlling our cluster.
+
+Launch an Ubuntu 16.04 LTS Server.   
+    
+SSH to the server and run the below commands.  
+#sudo su  
+#apt-get update -y  
+#cd /home/ubuntu  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/remote-api-server.sh > remote-api-server.sh 
+#chmod +x remote-api-server.sh     
+#./remote-api-server.sh   
+  
+Copy the kubectl config file from the Main Master node to the Remote API Server Node.   
+The Kubectl config file is located at ~/.kube/config on the Main Master Node, extract the config file and import it to the Remote API Server at ~/.kube/ dir.   
+  
+Now, run the below command to confirm from the remote API server 
+$ kubectl get nodes  
+  
+    
+    
