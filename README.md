@@ -155,8 +155,21 @@ OUTPUT
 cluster is healthy  
 
 # Setting up HA Proxy Load Balancer  
-  
- 
+
+Launch an Ubuntu 16.04 LTS Server.  
+
+Run the below commands to install the HA Proxy Server.
+
+$sudo su
+#apt-get update && apt-get install -y haproxy 
+#mv /etc/haproxy/haproxy.cfg{,.back}
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/haproxy.cfg > haproxy.cfg
+#vi /etc/haproxy/haproxy.cfg
+
+update the hostname and ip address of all the masters in the haproxy.cfg.
+
+Now, start the HAProxy server
+#systemctl start haproxy
   
 # Kubernetes Main Master Initialization  
   
@@ -164,38 +177,62 @@ Launch an Ubuntu 16.04 LTS Server.
   
 SSH to the server and run the below commands.  
 #sudo su  
+#apt-get update -y
 #cd /home/ubuntu  
 #curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/kubeadm-config.yaml > kubeadm-config.yaml  
-  
+#vim kubeadm-config.yaml
 Edit the kubeadm-config.yaml and update the HOST0,HOST1,HOST2 IPs and controlPlaneEndpoint: "10.X.X.X:6443" with the IP address of the HA Proxy Load Balancer.  
   
 Install # kubectl # kubelet # kubeadm and # docker by running the below commands  
+ 
+Move the certificates from HOST0 of the etcd cluster to the Main Master Server and save them to /etc/kubernetes/pki dir.  
   
 #curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/main-master.sh > main-master.sh  
 #chmod +x main-master.sh  
 #./main-master.sh  
   
-Once the Main master is initialized, copy the Join token Command and save it for further reference.  
-Now, to start using your cluster, you need to run the following commands.  
+Once the Main master is initialized, run the below command to save the token to a text file.
 
-mkdir -p $HOME/.kube  
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  
-sudo chown $(id -u):$(id -g) $HOME/.kube/config  
+IPCLUSTER=$IP:6443;echo "kubeadm join --token $(kubeadm token list | sed '1d' | head -1| awk '{print $1}') $IPCLUSTER --discovery-token-ca-cert-hash sha256:$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print $2}')" > Join-token.txt
 
-# Adding More Masters 
+
+# Adding More Masters  
+  
+Launch an Ubuntu 16.04 LTS Server.  
+  
+SSH to the server and run the below commands.  
+#sudo su  
+#apt-get update -y  
+#cd /home/ubuntu  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/masters.sh > masters.sh  
+#chmod +x masters.sh  
+#./masters.sh
   
   
+Now, Join the Cluster as a Master Node.  
+- Make sure the first control plane node is fully initialized.  
+- Copy certificates between the first control plane node and the other control plane nodes.  
+- Join each control plane node with the join command that you saved to a text file, plus add the --experimental-control-plane flag.  
   
-  
-  
-  
-  
+Add Master Role to the second master created by running the below command. 
+
+kubectl label node <NAME> node-role.kubernetes.io/master=master
+
+
+
 # Adding Worker Nodes  
+
+Now, add Worker Nodes to  
   
-  
-  
-  
-  
-  
-  
+Launch an Ubuntu 16.04 LTS Server.   
+    
+SSH to the server and run the below commands.  
+#sudo su  
+#apt-get update -y  
+#cd /home/ubuntu  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/worker-setup.sh > worker-setup.sh
+#chmod +x worker-setup.sh
+#./worker-setup.sh
+
+Now, Join the Cluster as a Worker Node by running the join command that you saved to a text file and do not add --experimental-control-plane flag.  
   
