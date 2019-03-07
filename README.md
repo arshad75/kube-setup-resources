@@ -10,10 +10,10 @@ Launch three Ubuntu 16.04 LTS Servers and make sure that the three hosts can tal
 
 Install # kubelet # kubeadm and # docker by running the below commands   
 $sudo su  
-
-#chmod +x ha/etcd-setup/etcd-node.sh  
 #apt-get update -y  
-#./ha/etcd-setup/etcd-node.sh  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd-setup/etcd-node.sh > etcd-node.sh  
+#chmod +x etcd-node.sh  
+#./etcd-node.sh  
 
 Check the docker kubeadm and kubelet version  
 #kubeadm version  
@@ -40,18 +40,6 @@ Server:
   OS/Arch:          linux/amd64  
   Experimental:     false  
 
-First run the below command on all the three ETCD cluster hosts {HOST0,HOST1,HOST2} as a privileged user.   
-  
-#cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf  
-[Service]  
-ExecStart=  
-ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true    
-Restart=always  
-EOF  
-
-#systemctl daemon-reload  
-#systemctl restart kubelet  
-
 Now, on the first node (HOST0) of the etcd cluster generate the necessary certifigates by running the below shell script    
   
 Run the below command on the first Node to generate the ca.crt & ca.key.  
@@ -63,10 +51,11 @@ This creates two files
    
 Now create certificates for each member by running the below commands.  
   
-#chmod +x ha/etcd-setup/etcd-certs.s  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/etcd-setup/etcd-certs.sh > etcd-certs.sh 
+#chmod +x etcd-certs.s  
 #vim etcd-certs.sh ## update the HOST0, HOST1, and HOST2 in the script with the ip's of the etcd cluster nodes.  
 #./ha/etcd-setup/etcd-certs.sh  
-#cd /tmp/   ## The certificates are saved in the temp dir with the host name.  
+#cd /tmp/  ## The certificates are saved in the temp dir with the host name.  
   
 When you run the etcd-certs.sh script the keys and certs for the HOST0 are moved to the /etc/kubernetes/pki and /etc/kubernetes/pki/etcd/ folder respectively and the kubeadmcfg.yaml is saved at /tmp/{HOST0}/ dir.  
   
