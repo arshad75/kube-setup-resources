@@ -52,3 +52,41 @@ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl versio
 echo " ------------------ Installing the Dashboard ----------------"
 
 kubectl apply -f https://gist.githubusercontent.com/lc-kubeadm/5b8896b47ee046d33d73d51ef9dabc48/raw/d89fe9c5446dd9ee4b412d219c308bf2205003e0/kubernetes-dashboard.yaml
+
+echo " ------------------ Extracting the Dashboard Login Certificates ----------------"
+
+grep 'client-certificate-data' ~/.kube/config | head -n 1 | awk '{print $2}' | base64 -d >> kubecfg.crt
+grep 'client-key-data' ~/.kube/config | head -n 1 | awk '{print $2}' | base64 -d >> kubecfg.key
+
+openssl pkcs12 -export -clcerts -inkey kubecfg.key -in kubecfg.crt -out kubecfg.p12 -name "kubernetes-client"
+
+
+echo " ------------------ Creating a Dashboard User ----------------"
+
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+EOF
+
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') > login_token
+
+
+echo " ------------------ Dashboard user login Token is saved at /home/ubuntu/login_token ----------------"
