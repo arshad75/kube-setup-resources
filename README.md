@@ -169,22 +169,22 @@ SSH to the server and run the below commands.
 ### Copy the {ca.crt apiserver-etcd-client.crt & apiserver-etcd-client.key} certificates from HOST0 of the ETCD cluster to the Main Master Server and save the apiserver-etcd-client.crt & apiserver-etcd-client.key to /etc/kubernetes/pki and car.crt to /etc/kubernetes/pki/etcd dir of the Main Master Server.   
 
 #sudo su  
-#apt-get update -y
+#apt-get update -y  
 #cd /home/ubuntu  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/kubeadm-config.yaml > kubeadm-config.yaml 
-#vim kubeadm-config.yaml
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/kubeadm-config.yaml > kubeadm-config.yaml   
+#vim kubeadm-config.yaml  
 Edit the kubeadm-config.yaml and update the HOST0,HOST1,HOST2 IPs and controlPlaneEndpoint: "10.X.X.X:6443" with the IP address of the HA Proxy Load Balancer.  
   
 ##### Install # kubectl # kubelet # kubeadm and # docker by running the below commands  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/main-master.sh > main-master.sh    
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/main-master.sh > main-master.sh      
 #chmod +x main-master.sh  
 #./main-master.sh  
   
-Once the Main master is initialized, run the below command to save the token to a text file.
+Once the Main master is initialized, run the below command to save the token to a text file.  
 
-IPCLUSTER=$IP:6443;echo "kubeadm join --token $(kubeadm token list | sed '1d' | head -1| awk '{print $1}') $IPCLUSTER --discovery-token-ca-cert-hash sha256:$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print $2}')" > Join-token.txt
-
-
+IPCLUSTER=$IP:6443;echo "kubeadm join --token $(kubeadm token list | sed '1d' | head -1| awk '{print $1}') $IPCLUSTER --discovery-token-ca-cert-hash sha256:$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print $2}')" > Join-token.txt  
+  
+  
 # Adding More Masters  
   
 Launch an Ubuntu 16.04 LTS Server.  
