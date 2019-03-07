@@ -249,7 +249,7 @@ SSH to the server and run the below commands.
 #sudo su  
 #apt-get update -y  
 #cd /home/ubuntu  
-#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/remote-api-server.sh > remote-api-server.sh 
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/remote-api-server.sh > remote-api-server.sh   
 #chmod +x remote-api-server.sh     
 #./remote-api-server.sh   
   
