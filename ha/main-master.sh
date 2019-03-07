@@ -34,7 +34,7 @@ echo " ------------------ Kubeadm kubernetes installer | Finised  --------------
 
 echo " ------------------ Initiating Kubernetes Cluster Main Master  ----------------"
 
-kubeadm init --kubeconfig=/home/ubutu/kubeconfig.sh
+kubeadm init --config /home/ubutu/kubeadm-config.yaml
 
 set -e
 
