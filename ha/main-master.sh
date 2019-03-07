@@ -37,3 +37,18 @@ echo " ------------------ Initiating Kubernetes Cluster Main Master  -----------
 kubeadm init --kubeconfig=/home/ubutu/kubeconfig.sh
 
 set -e
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+IP=`ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}'`
+IPCLUSTER=$IP:6443;echo "kubeadm join --token $(kubeadm token list | sed '1d' | head -1| awk '{print $1}') $IPCLUSTER --discovery-token-ca-cert-hash sha256:$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | awk '{print $2}')"; > Join-token.txt
+
+echo " ------------------ Installing the Weave CNI plugin ----------------"
+
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+echo " ------------------ Installing the Dashboard ----------------"
+
+kubectl apply -f https://gist.githubusercontent.com/lc-kubeadm/5b8896b47ee046d33d73d51ef9dabc48/raw/d89fe9c5446dd9ee4b412d219c308bf2205003e0/kubernetes-dashboard.yaml
