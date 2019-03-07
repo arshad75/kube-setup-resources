@@ -193,11 +193,10 @@ SSH to the server and run the below commands.
 #sudo su  
 #apt-get update -y  
 #cd /home/ubuntu  
-  
-#chmod +x ha/masters.sh  
-#./ha/masters.sh
-  
-  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/masters.sh > masters.sh   
+#chmod +x masters.sh  
+#./masters.sh
+ 
 Now, Join the Cluster as a Master Node.  
 - Make sure the first control plane node is fully initialized.  
 - Copy certificates between the first control plane node and the other control plane nodes.  
@@ -205,7 +204,7 @@ Now, Join the Cluster as a Master Node.
   
 Add Master Role to the second master created by running the below command. 
 
-kubectl label node <NAME> node-role.kubernetes.io/master=master
+kubectl label NODE-NAME node-role.kubernetes.io/master=master
 
 # Adding Worker Nodes  
 
@@ -217,9 +216,9 @@ SSH to the server and run the below commands.
 #sudo su  
 #apt-get update -y  
 #cd /home/ubuntu  
-  
+#curl https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/master/ha/worker-setup.sh > worker-setup.sh 
 #chmod +x worker-setup.sh  
-#./ha/worker-setup.sh  
+#./worker-setup.sh  
   
 Now, Join the Cluster as a Worker Node by running the join command that you saved to a text file and do not add --experimental-control-plane flag.  
 
