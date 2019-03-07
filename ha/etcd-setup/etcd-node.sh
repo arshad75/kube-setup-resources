@@ -45,3 +45,14 @@ apt-get install  kubelet=$KUBELET_VERSION kubeadm=$KUBEADM_VERSION docker-ce=$DO
 #apt install kubectl=$KUBECTL_VERSION && apt-mark hold kubectl
 
 apt-mark hold kubelet kubeadm  docker-ce
+
+
+cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true
+Restart=always
+EOF
+
+systemctl daemon-reload
+systemctl restart kubelet
