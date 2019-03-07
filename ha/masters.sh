@@ -41,7 +41,6 @@ add-apt-repository \
 
 apt-get update
 apt-get install  kubelet=$KUBELET_VERSION kubeadm=$KUBEADM_VERSION docker-ce=$DOCKER_VERSION
-apt install kubectl=$KUBECTL_VERSION && apt-mark hold kubectl
 
 apt-mark hold kubelet kubeadm  docker-ce
 
