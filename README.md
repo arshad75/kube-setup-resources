@@ -1,4 +1,4 @@
-![alt text](http://url/to/https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiP-_SC4PHgAhWLrI8KHf8VBFcQjRx6BAgBEAU&url=https%3A%2F%2Fredislabs.com%2Fblog%2Fgetting-started-with-kubernetes-and-redis-using-redis-enterprise%2F&psig=AOvVaw3RFnMOraiGvJ5oE69TAebH&ust=1552106967611949)
+![alt text](https://redislabs.com/wp-content/uploads/2017/05/KubernetesLogo.png)
 
 # kube-setup-resources
 Kubernetes Cluster setup resources
