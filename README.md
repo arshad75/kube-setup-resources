@@ -1,10 +1,16 @@
-![alt text](https://raw.githubusercontent.com/cookeem/kubeadm-ha/master/images/Kubernetes.png)
+![alt text](https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/test/images/Kubernetes.png)
+![alt text](https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/test/images/bare-metal-k8ss.png)
+
 
 # kube-setup-resources
 Kubernetes Cluster setup resources
 
 ---------------------------------------------------------------------------------------------------------------------------------
 # Set up a High Availability etcd cluster with kubeadm
+
+#### Architecture Diagram 
+
+![alt text](https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/test/images/Architecture.jpeg)
 
 This task walks through the process of creating a high availability etcd cluster of three members that can be used as an external etcd when using kubeadm to set up a kubernetes cluster.  
 
