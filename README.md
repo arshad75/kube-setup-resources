@@ -1,3 +1,5 @@
+![alt text](https://raw.githubusercontent.com/cookeem/kubeadm-ha/master/images/Kubernetes.png)
+
 # kube-setup-resources
 Kubernetes Cluster setup resources
 
