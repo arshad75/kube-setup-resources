@@ -1,5 +1,3 @@
-![alt text](https://redislabs.com/wp-content/uploads/2017/05/KubernetesLogo.png)
-
 # kube-setup-resources
 Kubernetes Cluster setup resources
 
