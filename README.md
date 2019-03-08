@@ -1,4 +1,4 @@
-![alt text](https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/test/images/bare-metal-k8ss.png)
+          ![alt text](https://raw.githubusercontent.com/lc-kubeadm/kube-setup-resources/test/images/bare-metal-k8ss.png)
 
 
 # kube-setup-resources
