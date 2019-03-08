@@ -239,7 +239,7 @@ The TOKEN to login to the Dashboard was generated during the Main Master setup a
 SSH to the Main Master and cat /home/ubuntu/login_token to get the login token.  
 
 
-# Configuring remote cluster control
+# Configuring Remote Cluster Control
 
 One more things that we left to do is to configure a remote kubectl utility, that we’ll use for controlling our cluster.
 
@@ -258,6 +258,53 @@ The Kubectl config file is located at ~/.kube/config on the Main Master Node, ex
   
 Now, run the below command to confirm from the remote API server 
 $ kubectl get nodes  
+ 
+ 
+# Horizontal Pod Autoscaler - deploying the Metrics Server   
   
+Login to the remote kubectl utility server and run the below commands to deploy the kubernetes metrics server.  
+  
+    $sudo su  
+    #kubectl create -f /metrics-server  
+  
+There are 7 yaml files that needs to be deployed and are available in the metrics-server folder. Download the metrics-server folder and run the below command.   
+  
+    #kubectl create -f metrics-server/  
+  
+###Test the Horizontal Pod Autoscaler  
+  
+First, we will start a deployment running the image and expose it as a service:  
+#kubectl run php-apache --image=k8s.gcr.io/hpa-example --requests=cpu=200m --expose --port=80  
+  
+  
+###Create Horizontal Pod Autoscaler  
+
+    # kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10  
+  
+    # kubectl get hpa  
+  
+    horizontalpodautoscaler.autoscaling/php-apache autoscaled
     
+    NAME         REFERENCE                     TARGET    MINPODS   MAXPODS   REPLICAS   AGE
+    php-apache   Deployment/php-apache/scale   0% / 50%  1         10        1          18s
     
+###Increase load  
+  
+    # kubectl run -i --tty load-generator --image=busybox /bin/sh
+
+Hit enter for command prompt  
+
+    while true; do wget -q -O- http://php-apache.default.svc.cluster.local; done
+
+
+kubectl get hpa  
+  
+    NAME         REFERENCE                     TARGET      CURRENT   MINPODS   MAXPODS   REPLICAS   AGE
+    php-apache   Deployment/php-apache/scale   305% / 50%  305%      1         10        1          3m
+  
+    # kubectl get deployment php-apache
+    
+    NAME         DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+    php-apache   7         7         7            7           19m
+
+ 
